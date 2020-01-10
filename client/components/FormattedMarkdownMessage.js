@@ -13,6 +13,8 @@ const FormattedMarkdownMessage = ({ intl, id, description, defaultMessage, value
     values
   );
 
+  console.log(markdown)
+
   if (Array.isArray(markdown)) {
     for (let i = 0; i < markdown.length; i++) {
       const part = markdown[i];

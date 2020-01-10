@@ -2,6 +2,7 @@
 
 const path = require('path');
 const readdir = require('fs').readdirSync;
+const readFile = require('fs').readFileSync;
 const writeFile = require('fs').writeFileSync;
 const mkdir = require('mkdirp').sync;
 const transformFile = require('@babel/core').transformFileSync;
@@ -13,6 +14,9 @@ const filesToCheck = [
   webpackPaths.entry
 ];
 
+const stringFilesToCheck = [
+]
+
 const componentDir = path.resolve(__dirname, '..', 'client', 'components');
 
 const addJSFiles = (dirPath) => {
@@ -23,8 +27,13 @@ const addJSFiles = (dirPath) => {
       withFileTypes: true
     }
   )) {
-    if (file.isFile() && /\.js$/.test(file.name)) {
-      filesToCheck.push(path.join(dirPath, file.name));
+    if (file.isFile()) {
+      if (/Strings\.js$/.test(file.name)) {
+        stringFilesToCheck.push(path.join(dirPath, file.name))
+      }
+      else if (/\.js$/.test(file.name)) {
+        filesToCheck.push(path.join(dirPath, file.name));
+      }
     } else if (file.isDirectory()) {
       addJSFiles(path.join(dirPath, file.name));
     }
@@ -72,6 +81,20 @@ for (const file of filesToCheck) {
     ) {
       messages[message.id] = message;
       newMessageIDs.push(message.id);
+    }
+  }
+}
+
+for (const file of stringFilesToCheck) {
+  const file_messages = JSON.parse(readFile(file, {encoding: 'utf8'}));
+
+  for (message of file_messages) {
+    if ( 
+      !(message.id in messages) ||
+      messages[message.id].defaultMessage !== message.default
+    ) {
+      messages[message.id] = message
+      newMessageIDs.push(message.id)
     }
   }
 }

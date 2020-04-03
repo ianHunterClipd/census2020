@@ -1,7 +1,9 @@
 import React from 'react';
 
+import './loadingPage.scss';
+
 const LoadingPage = () => (
-  <div>
+  <div className="c_loading-page">
     Loading...
   </div>
 );

@@ -11,10 +11,18 @@ import { messages } from '../../i18n/translations';
 import './App.scss';
 
 import { Footer } from './Footer';
+
+import ScrollToTop from './ScrollToTop';
+
 const Home = React.lazy(() => import('./DetailViewContainer'));
 const FAQ = React.lazy(() => import('./FAQ'));
 const SampleCensus = React.lazy(() => import('./SampleCensus'));
 // const Contact = React.lazy(() => import('./Contact'));
+
+/* import Home from './DetailViewContainer'
+import FAQ from './FAQ'
+import SampleCensus from './SampleCensus' */
+
 export default class App extends React.PureComponent {
   render () {
     return (
@@ -32,12 +40,15 @@ export default class App extends React.PureComponent {
                 <div
                   className="c_app"
                 >
-                  <Navigation
-                  />
-                  <div className="c_app__content-and-footer">
+                  <Navigation />
+                  <ScrollToTop />
+                  <div
+                    id="app-content-and-footer"
+                    className="c_app__content-and-footer">
                     <div
                       className="c_app__content"
                     >
+                      <div id="scroll-placeholder"></div>
                       <React.Suspense fallback={<LoadingPage />}>
                         <Switch>
                           <Route exact path='/' component={Home} />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 import classnames from 'classnames';
@@ -132,8 +132,16 @@ CensusLink.propTypes = {
   desktop: PropTypes.boolean
 };
 
-const MobileMenu = () => {
+let MobileMenu = ({ location }) => {
   const [open, setOpen] = useState(false);
+
+  useEffect(
+    () => {
+      setOpen(false);
+    },
+    [ location.pathname ]
+  );
+
   return (
     <div className="c_mobile-menu">
       <button
@@ -189,4 +197,12 @@ const MobileMenu = () => {
       </div>
     </div>
   );
+};
+
+MobileMenu = withRouter(MobileMenu);
+
+MobileMenu.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired
+  })
 };
